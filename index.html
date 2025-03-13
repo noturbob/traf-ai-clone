@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Footage Tester</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
+</head>
+<body>
+    <input placeholder="enter Ip Address" id="ipAddress" type="text">
+    <button id="connect">Connect</button>
+    <img id="liveFeed" width="640" height="480" alt="liveFeed">
+    <script>
+        let model;
+        let detectionResults = [];
+
+        async function LoadModel(){
+            model = await cocoSsd.load();
+            console.log("Model Loaded Successfully");
+        }
+        LoadModel();
+
+        
+        const video = document.querySelector("#connect");
+        video.addEventListener("click", () => {
+            const ipAddress = document.querySelector("#ipAddress").value;
+            const liveFeed = document.querySelector("#liveFeed");
+            liveFeed.src = `https://${ipAddress}/video`;
+        });
+    </script>
+</body>
+</html>
