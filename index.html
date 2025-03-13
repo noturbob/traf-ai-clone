@@ -9,7 +9,7 @@
 </head>
 <body>
     <input placeholder="enter Ip Address" id="ipAddress" type="text">
-    <button id="connect">Connect</button>
+    <button id="connect">Connecting This</button>
     <img id="liveFeed" width="640" height="480" alt="liveFeed">
     <script>
         let model;
@@ -19,14 +19,14 @@
             model = await cocoSsd.load();
             console.log("Model Loaded Successfully");
         }
-        LoadModel();
+        LoadModel(); 
 
         
         const video = document.querySelector("#connect");
         video.addEventListener("click", () => {
             const ipAddress = document.querySelector("#ipAddress").value;
             const liveFeed = document.querySelector("#liveFeed");
-            liveFeed.src = `https://${ipAddress}/video`;
+            liveFeed.src = `https://traf-ai-clone.vercel.app/proxy?url=https://${ipAddress}/video`;
         });
     </script>
 </body>

@@ -1,24 +1,20 @@
 const express = require("express");
 const cors = require("cors");
-const axios = require("axios");
+const request = require("request");
 
 const app = express();
 app.use(cors());
-app.use(express.json());
 
-app.get("/proxy",async(req,res) => {
-    try{
-        const targetUrl = req.query.url;
-        if(!targetUrl) return res.status(400),json({error:"Missing Url"});
+app.get("/proxy", (req, res) => {
+    const streamUrl = req.query.url; // The IP camera's MJPEG URL
+    if (!streamUrl) return res.status(400).json({ error: "Missing stream URL" });
 
-        const response = await axios.get(targetUrl,{
-            headers:{"User-Agent":"Mozilla/5.0"},
-        });
-        res.send(response.data);
-    }catch(error){
-        res.status(500).json({error:"Request Failed from Server",details: error.message});
-    }
+    console.log(`Proxying video stream from: ${streamUrl}`);
+
+    res.setHeader("Content-Type", "multipart/x-mixed-replace; boundary=frame");
+    
+    request.get(streamUrl).pipe(res); // Pipe MJPEG frames to the frontend
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT,() => console.log(`Proxy Server Running on port ${PORT}`));
+app.listen(PORT, () => console.log(`MJPEG Proxy running on port ${PORT}`));
